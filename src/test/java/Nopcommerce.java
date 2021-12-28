@@ -31,6 +31,14 @@ public class Nopcommerce {
 		
 		Assert.assertTrue(pageHeadingTxt.contains("Products"));
 		
+		WebElement addNewBtn = driver.findElement(By.cssSelector("form[action='/Admin/Product/List'] a[href='/Admin/Product/Create']"));
+		addNewBtn.click();
+		
+		Assert.assertTrue(driver.getCurrentUrl().contains("/Admin/Product/Create"));
+		pageHeadingTxt = driver.findElement(By.cssSelector("form#product-form h1")).getText();
+		Assert.assertTrue(pageHeadingTxt.contains("Add a new product"));
+		
+		
 //		driver.quit();
 	}
 
