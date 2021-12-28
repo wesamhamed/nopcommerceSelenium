@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 
 public class Nopcommerce {
@@ -77,8 +78,30 @@ public class Nopcommerce {
 	    String categoryTag = driver.findElement(By.cssSelector("#SelectedCategoryIds_taglist li span:first-child")).getText();
 	    boolean categoryTagListNotEmpty =categoryTagList.size() > 0;
 	    Assert.assertTrue(categoryTagListNotEmpty);
-	    Assert.assertEquals(categoryTag,categoryName);
-		
+//	    Assert.assertEquals(categoryTag,categoryName);
+	    
+	    WebElement spinButtonForPrice =driver.findElement(By.xpath("//*[@id='Price']/preceding-sibling::input"));
+	    spinButtonForPrice.click();
+	    String price ="40";
+	    WebElement priceTxtField = driver.findElement(By.id("Price"));
+	    priceTxtField.sendKeys(price);
+	    String priceValue = priceTxtField.getAttribute("value");
+	    Assert.assertTrue(priceValue.contains(price));
+	    
+	    WebElement taxExemptCheckbox = driver.findElement(By.id("IsTaxExempt"));
+	    taxExemptCheckbox.click();
+	    Assert.assertTrue(taxExemptCheckbox.isSelected());
+	    WebElement panelTaxCategory = driver.findElement(By.id("pnlTaxCategory"));
+	    String panelTaxCategoryClasses = panelTaxCategory.getAttribute("class");
+	    Assert.assertTrue(panelTaxCategoryClasses.contains("d-none"));
+	    taxExemptCheckbox.click();
+	    Assert.assertFalse(taxExemptCheckbox.isSelected());
+	    
+	    WebElement taxCategoryEle = driver.findElement(By.id("TaxCategoryId"));
+	    Select taxCategorySelect = new Select(taxCategoryEle);
+	    taxCategorySelect.selectByVisibleText("Books");
+	    Assert.assertEquals(taxCategorySelect.getFirstSelectedOption().getText(),"Books");
+	   
 //		driver.quit();
 	}
 
