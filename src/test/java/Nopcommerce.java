@@ -102,6 +102,22 @@ public class Nopcommerce {
 	    taxCategorySelect.selectByVisibleText("Books");
 	    Assert.assertEquals(taxCategorySelect.getFirstSelectedOption().getText(),"Books");
 	   
+	    WebElement inventoryMethodEl = driver.findElement(By.id("ManageInventoryMethodId"));
+	    Select inventoryMethodSelect = new Select(inventoryMethodEl);
+	    inventoryMethodSelect.selectByValue("1");
+	    Assert.assertEquals(inventoryMethodSelect.getFirstSelectedOption().getText(), "Track inventory");
+	    
+	    WebElement spinButtonForStockQuantity =driver.findElement(By.xpath("//*[@id='StockQuantity']/preceding-sibling::input"));
+	    spinButtonForStockQuantity.click();
+	    WebElement stockQuantityTxtField = driver.findElement(By.id("StockQuantity"));
+	    stockQuantityTxtField.clear();
+	    String stockQuantity ="1000";
+	    stockQuantityTxtField.sendKeys(stockQuantity);
+	    String stockQuantityValue = stockQuantityTxtField.getAttribute("value");
+	    Assert.assertEquals(stockQuantityValue, stockQuantity);
+	    
+	    
+	    
 //		driver.quit();
 	}
 
