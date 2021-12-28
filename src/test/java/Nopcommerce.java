@@ -1,3 +1,5 @@
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -38,6 +40,44 @@ public class Nopcommerce {
 		pageHeadingTxt = driver.findElement(By.cssSelector("form#product-form h1")).getText();
 		Assert.assertTrue(pageHeadingTxt.contains("Add a new product"));
 		
+		WebElement productNameTxtField = driver.findElement(By.id("Name"));
+		String productName ="product1";
+		productNameTxtField.sendKeys(productName);
+		String productNameValue =productNameTxtField.getAttribute("value");
+		Assert.assertEquals(productNameValue, productName);
+		
+		WebElement shortDescriptionTxtArea = driver.findElement(By.id("ShortDescription"));
+		String shortDescription ="short description";
+		shortDescriptionTxtArea.sendKeys(shortDescription);
+		String shortDescriptionValue = shortDescriptionTxtArea.getAttribute("value");
+		Assert.assertEquals(shortDescriptionValue,shortDescription);
+		
+		
+		driver.switchTo().frame("FullDescription_ifr");
+		WebElement fullDescriptionTextField = driver.findElement(By.cssSelector("#tinymce p"));
+		String fullDescription = "full description";
+		fullDescriptionTextField.sendKeys(fullDescription);
+		String fullDescriptionTxt = fullDescriptionTextField.getText();
+		Assert.assertEquals(fullDescriptionTxt, fullDescription);
+	    driver.switchTo().defaultContent();
+	    
+	    WebElement productSKUTxtField = driver.findElement(By.id("Sku"));
+	    String productSKU = "product sku";
+	    productSKUTxtField.sendKeys(productSKU);
+	    String productSKUTValue =productSKUTxtField.getAttribute("value");
+	    Assert.assertEquals(productSKUTValue, productSKU);
+	    
+	    WebElement categoriesList =driver.findElement(By.id("SelectedCategoryIds_taglist"));
+	    builder.moveToElement(categoriesList).click().build().perform();
+	    WebElement categoryItem = driver.findElement(By.cssSelector("#SelectedCategoryIds_listbox li"));
+	    String categoryName = categoryItem.getText();
+	    categoryItem.click();
+	    
+	    List<WebElement> categoryTagList = driver.findElements(By.cssSelector("#SelectedCategoryIds_taglist li"));
+	    String categoryTag = driver.findElement(By.cssSelector("#SelectedCategoryIds_taglist li span:first-child")).getText();
+	    boolean categoryTagListNotEmpty =categoryTagList.size() > 0;
+	    Assert.assertTrue(categoryTagListNotEmpty);
+	    Assert.assertEquals(categoryTag,categoryName);
 		
 //		driver.quit();
 	}
