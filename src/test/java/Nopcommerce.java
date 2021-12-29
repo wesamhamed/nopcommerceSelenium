@@ -3,6 +3,7 @@ import java.time.Instant;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -243,7 +244,53 @@ public class Nopcommerce {
 		if (cardBodyEl.getCssValue("display").equals("none")) {
 			discountSection.click();
 		}
+		
+		WebElement discountNameTxtField = driver.findElement(By.id("Name"));
+		Instant currentTime = Instant.now();
+		String currentTimeValue = String.valueOf(currentTime);
+		String dicountName = "dicount_" + currentTimeValue;
+		discountNameTxtField.sendKeys(dicountName);
+		String discountNameValue = discountNameTxtField.getAttribute("value");
+		Assert.assertEquals(discountNameValue, dicountName);
+		
+		WebElement discountTypeEl = driver.findElement(By.id("DiscountTypeId"));
+		Select discountTypeSelect = new Select(discountTypeEl);
+		discountTypeSelect.selectByValue("2");
+		Assert.assertEquals(discountTypeSelect.getFirstSelectedOption().getText(), "Assigned to products");
 
+		WebElement spinButtonForDiscountAmount = driver.findElement(By.xpath("//*[@id='DiscountAmount']/preceding-sibling::input"));
+		spinButtonForDiscountAmount.click();
+		String dicount = "40";
+		WebElement discountAmountTxtField = driver.findElement(By.id("DiscountAmount"));
+		discountAmountTxtField.sendKeys(dicount);
+		String discountValue = discountAmountTxtField.getAttribute("value");
+		Assert.assertTrue(discountValue.contains(dicount));
+		
+		WebElement startDateInput = driver.findElement(By.id("StartDateUtc"));
+		String startDate ="12/31/2021 12:00 AM";
+		startDateInput.sendKeys(startDate);
+		String startDateValue = startDateInput.getAttribute("value");
+		Assert.assertEquals(startDateValue,startDate);
+		
+		WebElement endDateInput = driver.findElement(By.id("EndDateUtc"));
+		String endDate ="2/28/2022 12:00 AM";
+		endDateInput.sendKeys(endDate);
+		String endDateValue = endDateInput.getAttribute("value");
+		Assert.assertEquals(endDateValue,endDate);
+      
+		
+		WebElement saveDiscountBtn = driver.findElement(By.cssSelector("[name='save']"));
+		saveDiscountBtn.click();
+		
+		Assert.assertTrue(driver.getCurrentUrl().contains("/Admin/Discount/List"));
+		pageHeadingTxt = driver.findElement(By.cssSelector(".content-header h1")).getText();
+		Assert.assertTrue(pageHeadingTxt.contains("Discounts"));
+		new WebDriverWait(driver, Duration.ofSeconds(3))
+		.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div.alert")));
+		WebElement closeAlertEl = driver.findElement(By.cssSelector("div.alert button"));
+		closeAlertEl.click();
+		
+		
 		 
 //		driver.quit();
 	}
